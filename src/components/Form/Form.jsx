@@ -1,11 +1,17 @@
 import { useState } from 'react';
 import { nanoid } from 'nanoid';
-import PropTypes from 'prop-types';
 import { Form, Input, Label, Button, Box } from './Form.styled';
+import { ContactsVarification } from 'Utils/ContactsVerification';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts, add } from '../../redux/contactsSlice';
 
-export default function ContactForm({ onSubmit }) {
+
+export default function ContactForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+const dispatch = useDispatch()
+  const contacts = useSelector(getContacts)
 
   const nameInputId = nanoid();
   const numberInputId = nanoid();
@@ -23,13 +29,24 @@ export default function ContactForm({ onSubmit }) {
         return;
     }
   };
+
   const sendForm = event => {
     event.preventDefault();
+    
     const data = {
       name: name,
       number: number,
     };
-    onSubmit(data);
+  
+    if( ContactsVarification(data , contacts)){
+      const {name, number} = data
+      dispatch(add(name, number))
+     
+    }
+
+    setName('')
+    setNumber('')
+    
   };
 
   return (
@@ -67,6 +84,3 @@ export default function ContactForm({ onSubmit }) {
   );
 }
 
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-}

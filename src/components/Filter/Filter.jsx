@@ -1,24 +1,20 @@
-import { Input } from './Filter.styled'
-import PropTypes from 'prop-types';
+import { Input } from './Filter.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { text, getFilter } from '../../redux/filterSlice';
 
-// import { useDispatch, useSelector } from 'react-redux';
-// import {  increment } from './redux/store'
+export const Filter = () => {
+  const dispatch = useDispatch();
+  const filter = useSelector(getFilter);
 
-
-
-export const Filter = ({ onSearchContact, value }) => {
-// const dispatch = useDispatch()
+  const changeFilter = event => {
+    dispatch(text(event.currentTarget.value));
+  };
   return (
     <Input
       type="text"
       name="serchContact"
-       onChange={onSearchContact}
-      value={value}
+      onChange={changeFilter}
+      value={filter}
     />
   );
 };
-
-Filter.propTypes = {
-    value: PropTypes.string.isRequired,
-    onSearchContact: PropTypes.func.isRequired,
-  };

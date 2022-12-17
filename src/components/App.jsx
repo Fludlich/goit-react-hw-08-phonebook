@@ -1,13 +1,25 @@
 import { ContactList } from './ContactList/ContactList';
 import ContactForm from './Form/Form';
-import { Filter } from './Filter/Filter';
+ import { Filter } from './Filter/Filter';
 import { Phonebook } from '../components/ContactList/ContactList.styled';
-import { useSelector } from 'react-redux';
-import { getContacts } from '../redux/contactsSlice';
+
+import { getContacts } from '../redux/store';
+import { fetchContacts } from '../redux/contactsOperations';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { useEffect } from 'react';
 
 export function App() {
 
-  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch()
+ 
+ useEffect(() => {
+ dispatch(fetchContacts())
+
+}, [dispatch]);
+
+
+const contacts = useSelector(getContacts);
 
 
   return (
@@ -20,7 +32,7 @@ export function App() {
           <Filter />
           <ContactList />
         </div>
-      )}
+       )} 
     </Phonebook>
   );
 }

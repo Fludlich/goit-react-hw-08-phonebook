@@ -3,15 +3,15 @@ import { nanoid } from 'nanoid';
 import { Form, Input, Label, Button, Box } from './Form.styled';
 import { ContactsVarification } from 'Utils/ContactsVerification';
 import { useDispatch, useSelector } from 'react-redux';
-import { getContacts, add } from '../../redux/contactsSlice';
-
+import { getContacts } from '../../redux/store';
+import { addContact } from '../../redux/contactsOperations';
 
 export default function ContactForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
-const dispatch = useDispatch()
-  const contacts = useSelector(getContacts)
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
 
   const nameInputId = nanoid();
   const numberInputId = nanoid();
@@ -32,21 +32,18 @@ const dispatch = useDispatch()
 
   const sendForm = event => {
     event.preventDefault();
-    
+
     const data = {
       name: name,
       number: number,
     };
-  
-    if( ContactsVarification(data , contacts)){
-      const {name, number} = data
-      dispatch(add(name, number))
-     
+
+    if (ContactsVarification(data, contacts)) {
+      dispatch(addContact(data));
     }
 
-    setName('')
-    setNumber('')
-    
+    setName('');
+    setNumber('');
   };
 
   return (
@@ -83,4 +80,3 @@ const dispatch = useDispatch()
     </Box>
   );
 }
-
